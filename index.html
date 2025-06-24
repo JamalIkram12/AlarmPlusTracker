@@ -2945,7 +2945,7 @@
                 });
                 
                 // Play alarm sound
-                playAlarmSound(alarmType, trade[alarmType]?.ringtoneUrl);
+                playAlarmSound(alarmType, trade[alarmType]?.ringtoneBase64);
                 
                 // Update UI
                 renderTradesTable();
@@ -2971,7 +2971,7 @@
                 });
                 
                 // Play alarm sound
-                playAlarmSound('general', alarm.ringtoneUrl);
+                playAlarmSound('general', alarm.ringtoneBase64);
                 
                 // Update UI
                 renderAlarmsTable();
