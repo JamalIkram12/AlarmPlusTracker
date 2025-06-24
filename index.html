@@ -2397,9 +2397,37 @@
             });
             
             // Alarm form submission
-            document.getElementById('alarmForm').addEventListener('submit', function(e) {
+            document.getElementById('alarmForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                saveGeneralAlarm();
+                
+                const asset = document.getElementById('alarmAsset').value.toUpperCase();
+                const type = document.getElementById('alarmType').value;
+                const valueType = document.querySelector('input[name="valueType"]:checked').value;
+                const value = parseFloat(document.getElementById('alarmValue').value);
+                const ringtoneFile = document.getElementById('alarmRingtone').files[0];
+                
+                // Convert ringtone to base64
+                let ringtoneBase64 = null;
+                if (ringtoneFile) {
+                    ringtoneBase64 = await readFileAsBase64(ringtoneFile);
+                }
+                
+                const newAlarm = {
+                    id: nextAlarmId++,
+                    asset,
+                    type,
+                    valueType,
+                    value,
+                    ringtoneBase64,
+                    triggered: false,
+                    timestamp: Date.now()
+                };
+                
+                generalAlarms.push(newAlarm);
+                saveAlarmsToStorage();
+                renderAlarmsTable();
+                showNotification('Alarm added successfully!');
+                document.getElementById('alarmForm').reset();
             });
             
             // Silence all alarms
