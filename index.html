@@ -2985,11 +2985,16 @@
             }
             
             // Play alarm sound
-            function playAlarmSound(type, customUrl = null) {
+                        function playAlarmSound(type, base64 = null) {
                 const audioElement = alarmState.audioElements[type] || alarmState.audioElements.general;
                 
-                if (customUrl) {
-                    audioElement.src = customUrl;
+                if (base64) {
+                    audioElement.src = base64;
+                }
+                
+                audioElement.loop = true;
+                audioElement.play().catch(e => console.error('Error playing alarm:', e));
+                alarmState.isAlarmRinging = true;
                 }
                 
                 audioElement.loop = true;
