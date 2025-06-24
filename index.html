@@ -2213,10 +2213,10 @@
             // Initialize coin unit and fee label
             coinUnit.textContent = 'BTC';
             feeLabel.textContent = 'Fee (BTC)';
-            
-            // Form submission
+
+                        // Form submission
             const tradeForm = document.getElementById('tradeForm');
-            tradeForm.addEventListener('submit', function(e) {
+            tradeForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 // Get form values
@@ -2236,9 +2236,20 @@
                 const stopLossType = document.querySelector('input[name="stopLossType"]:checked').value;
                 const stopLossValue = parseFloat(document.getElementById('stopLossValue').value) || 0;
                 
-                // Get ringtone files
+                // Get ringtone files and convert to base64
                 const takeProfitRingtoneFile = document.getElementById('takeProfitRingtone').files[0];
                 const stopLossRingtoneFile = document.getElementById('stopLossRingtone').files[0];
+                
+                let takeProfitBase64 = null;
+                let stopLossBase64 = null;
+
+                if (takeProfitRingtoneFile) {
+                    takeProfitBase64 = await readFileAsBase64(takeProfitRingtoneFile);
+                }
+
+                if (stopLossRingtoneFile) {
+                    stopLossBase64 = await readFileAsBase64(stopLossRingtoneFile);
+                }
                 
                 // Format date
                 const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -2268,12 +2279,12 @@
                         takeProfit: takeProfitValue ? {
                             type: takeProfitType,
                             value: takeProfitValue,
-                            ringtoneUrl: takeProfitRingtoneFile ? URL.createObjectURL(takeProfitRingtoneFile) : null
+                            ringtoneBase64: takeProfitBase64
                         } : null,
                         stopLoss: stopLossValue ? {
                             type: stopLossType,
                             value: stopLossValue,
-                            ringtoneUrl: stopLossRingtoneFile ? URL.createObjectURL(stopLossRingtoneFile) : null
+                            ringtoneBase64: stopLossBase64
                         } : null,
                         notes: notes
                     };
